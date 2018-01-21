@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 using namespace std;
 
@@ -28,6 +29,31 @@ void render_texture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y) {
     render_texture(tex, ren, x, y, w, h);
 }
 
+SDL_Texture *create_text(const string &message, const string &font_file,
+                SDL_Color color, int fontSize, SDL_Renderer *ren) {
+    auto font = TTF_OpenFont(font_file.c_str(), fontSize);
+    if (font == nullptr) {
+        cerr << "Error loading font: " << font_file << ": " << SDL_GetError() << endl;
+        return nullptr;
+    }
+
+    auto surf = TTF_RenderText_Blended(font, message.c_str(), color);
+    if (surf == nullptr) {
+        cerr << "Error rendering text" << endl;
+        return nullptr;
+    }
+
+    auto texture = SDL_CreateTextureFromSurface(ren, surf);
+    if (texture == nullptr) {
+        cerr << "Error creating text texture" << endl;
+        return nullptr;
+    }
+
+    SDL_FreeSurface(surf);
+    TTF_CloseFont(font);
+    return texture;
+}
+
 int main() {
     SDL_Window *win = nullptr;
     SDL_Renderer *ren = nullptr;
@@ -35,6 +61,11 @@ int main() {
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         cerr << "SDL_Init error: " << SDL_GetError() << endl;
+        return 1;
+    }
+
+    if (TTF_Init() != 0) {
+        cerr << "TTF_Init error: " << SDL_GetError() << endl;
         return 1;
     }
 
@@ -56,6 +87,8 @@ int main() {
         return 1;
     }
 
+    auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+
     bool quit = false;
     while (!quit) {
         SDL_Event e;
@@ -63,13 +96,18 @@ int main() {
             if (e.type == SDL_QUIT) {
                 quit = true;
             } else if (e.type == SDL_KEYUP) {
-                if (e.key.keysym.sym == SDLK_ESCAPE) {
-                    quit = true;
+                switch (e.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                    case SDLK_q:
+                        quit = true;
+                        break;
                 }
             }
         }
 
         SDL_RenderClear(ren);
+        render_texture(texture, ren, 0, 0);
+        render_texture(text_texture, ren, 0, 0);
         SDL_RenderPresent(ren);
     }
 
