@@ -18,7 +18,7 @@ add_executable(${PROG}
 
 target_include_directories(${PROG} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(${PROG} PRIVATE cxx_std_14)
-target_link_libraries(${PROG} SDL2)
+target_link_libraries(${PROG} SDL2 SDL2_image)
 
 add_custom_target(run COMMAND ./${PROG} DEPENDS ${PROG})
 add_custom_target(debug COMMAND lldb ./${PROG} DEPENDS ${PROG})
