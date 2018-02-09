@@ -11,3 +11,15 @@ void Component::draw(SDL_Renderer *ren) {
     dst.h = h;
     SDL_RenderCopy(ren, texture, NULL, &dst);
 }
+
+Component *Component::text_component() {
+    Component *component = new Component;
+    component->component_type = ComponentType::Text;
+    return component;
+}
+
+Component *Component::image_component() {
+    Component *component = new Component;
+    component->component_type = ComponentType::Image;
+    return component;
+}

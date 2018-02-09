@@ -13,6 +13,9 @@ struct Component {
     SDL_Texture *texture;
 
     void draw(SDL_Renderer *ren);
+
+    static Component *text_component();
+    static Component *image_component();
 };
 
 #endif // COMPONENT_H_

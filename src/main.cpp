@@ -59,7 +59,6 @@ SDL_Texture *create_text(const string &message, const string &font_file,
 int main() {
     SDL_Window *win = nullptr;
     SDL_Renderer *ren = nullptr;
-    bool error_occurred = false;
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         cerr << "SDL_Init error: " << SDL_GetError() << endl;
@@ -91,7 +90,7 @@ int main() {
 
     Slide current;
 
-    Component *image_component = new Component;
+    Component *image_component = Component::image_component();
     image_component->texture = texture;
     image_component->component_type = ComponentType::Image;
     image_component->position = {800, 0};
@@ -100,7 +99,7 @@ int main() {
 
     auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
 
-    Component *text_component = new Component;
+    Component *text_component = Component::text_component();
     text_component->texture = text_texture;
     text_component->component_type = ComponentType::Text;
     text_component->position = {0, 0};
