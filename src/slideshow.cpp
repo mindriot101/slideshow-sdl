@@ -26,3 +26,11 @@ void Slideshow::previous_slide() {
 
     printf("Current slide: %u\n", current_slide);
 }
+
+Slideshow::~Slideshow() {
+    for (auto slide: slides) {
+        if (slide != nullptr) {
+            delete slide;
+        }
+    }
+}

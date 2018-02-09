@@ -15,6 +15,7 @@ struct Slideshow {
     void draw(SDL_Renderer *ren);
     void next_slide();
     void previous_slide();
+    ~Slideshow();
 };
 
 #endif //  SLIDESHOW_H_
