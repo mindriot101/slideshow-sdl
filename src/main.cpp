@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "slide.h"
 #include "component.h"
+#include "image_manager.h"
 #include "slideshow.h"
 
 using namespace std;
@@ -83,11 +84,8 @@ int main() {
         return 1;
     }
 
-    auto texture = load_texture("../run_tree/images/cat.png", ren);
-    if (texture == nullptr) {
-        cerr << "Error loading texture from file" << endl;
-        return 1;
-    }
+    ImageManager image_manager(ren);
+    image_manager.add("cat", "../run_tree/images/cat.png");
 
     Slideshow show;
 
@@ -95,39 +93,23 @@ int main() {
         auto current = make_shared<Slide>();
 
         auto image_component = Component::image_component();
-        image_component->texture = texture;
+        image_component->texture = image_manager.get("cat");
+        if (image_component->texture == nullptr) {
+            fprintf(stderr, "TEXTURE IS NULL!!!\n");
+            return 1;
+        }
         image_component->component_type = ComponentType::Image;
         image_component->position = {800, 300};
         current->add(image_component);
 
 
-        auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+        // auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
 
-        auto text_component = Component::text_component();
-        text_component->texture = text_texture;
-        text_component->component_type = ComponentType::Text;
-        text_component->position = {200, 0};
-        current->add(text_component);
-
-        show.append(current);
-    }
-    {
-        auto current = make_shared<Slide>();
-
-        auto image_component = Component::image_component();
-        image_component->texture = texture;
-        image_component->component_type = ComponentType::Image;
-        image_component->position = {800, 0};
-        current->add(image_component);
-
-
-        auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
-
-        auto text_component = Component::text_component();
-        text_component->texture = text_texture;
-        text_component->component_type = ComponentType::Text;
-        text_component->position = {0, 0};
-        current->add(text_component);
+        /* auto text_component = Component::text_component(); */
+        /* text_component->texture = text_texture; */
+        /* text_component->component_type = ComponentType::Text; */
+        /* text_component->position = {200, 0}; */
+        /* current->add(text_component); */
 
         show.append(current);
     }
