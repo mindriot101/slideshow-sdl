@@ -22,3 +22,8 @@ void Slideshow::previous_slide() {
         current_slide -= 1;
     }
 }
+
+void Slideshow::toggle_fullscreen(SDL_Window *window) {
+    fullscreen = !fullscreen;
+    SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+}

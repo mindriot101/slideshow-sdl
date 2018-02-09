@@ -113,6 +113,9 @@ int main() {
                     case SDLK_p:
                         show.previous_slide();
                         break;
+                    case SDLK_f:
+                        show.toggle_fullscreen(win);
+                        break;
                 }
             }
         }
