@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include "slide.h"
+#include "component.h"
 
 using namespace std;
 
@@ -87,7 +89,22 @@ int main() {
         return 1;
     }
 
+    Slide current;
+
+    Component *image_component = new Component;
+    image_component->texture = texture;
+    image_component->component_type = ComponentType::Image;
+    image_component->position = {800, 0};
+    current.add(image_component);
+
+
     auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+
+    Component *text_component = new Component;
+    text_component->texture = text_texture;
+    text_component->component_type = ComponentType::Text;
+    text_component->position = {0, 0};
+    current.add(text_component);
 
     bool quit = false;
     while (!quit) {
@@ -106,8 +123,9 @@ int main() {
         }
 
         SDL_RenderClear(ren);
-        render_texture(texture, ren, 0, 0);
-        render_texture(text_texture, ren, 0, 0);
+        current.draw(ren);
+        /* render_texture(texture, ren, 800, 0); */
+        /* render_texture(text_texture, ren, 0, 0); */
         SDL_RenderPresent(ren);
     }
 
