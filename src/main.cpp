@@ -34,24 +34,6 @@ void render_texture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y) {
     render_texture(tex, ren, x, y, w, h);
 }
 
-SDL_Texture *create_text(const string &message, TTF_Font *font,
-                SDL_Color color, int fontSize, SDL_Renderer *ren) {
-    auto surf = TTF_RenderText_Blended(font, message.c_str(), color);
-    if (surf == nullptr) {
-        cerr << "Error rendering text" << endl;
-        return nullptr;
-    }
-
-    auto texture = SDL_CreateTextureFromSurface(ren, surf);
-    if (texture == nullptr) {
-        cerr << "Error creating text texture" << endl;
-        return nullptr;
-    }
-
-    SDL_FreeSurface(surf);
-    return texture;
-}
-
 int main() {
     SDL_Window *win = nullptr;
     SDL_Renderer *ren = nullptr;
@@ -81,7 +63,7 @@ int main() {
     ImageManager image_manager(ren);
     image_manager.add("cat", "../run_tree/images/cat.png");
 
-    FontManager font_manager;
+    FontManager font_manager(ren);
     font_manager.add("droid", "../run_tree/fonts/DroidSansMono.ttf", 84);
 
     Slideshow show;
@@ -100,7 +82,7 @@ int main() {
         current->add(image_component);
 
 
-        auto text_texture = create_text("Hello world", font_manager.get("droid"), {255, 255, 255, 255}, 64, ren);
+        auto text_texture = font_manager.create_text("Hello world", "droid", {255, 255, 255, 255});
 
         auto text_component = Component::text_component();
         text_component->texture = text_texture;
