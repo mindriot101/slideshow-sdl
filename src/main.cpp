@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "slide.h"
 #include "component.h"
+#include "slideshow.h"
 
 using namespace std;
 
@@ -88,22 +89,48 @@ int main() {
         return 1;
     }
 
-    Slide current;
+    Slideshow show;
 
-    Component *image_component = Component::image_component();
-    image_component->texture = texture;
-    image_component->component_type = ComponentType::Image;
-    image_component->position = {800, 0};
-    current.add(image_component);
+    {
+        Slide *current = new Slide;;
+
+        Component *image_component = Component::image_component();
+        image_component->texture = texture;
+        image_component->component_type = ComponentType::Image;
+        image_component->position = {800, 300};
+        current->add(image_component);
 
 
-    auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+        auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
 
-    Component *text_component = Component::text_component();
-    text_component->texture = text_texture;
-    text_component->component_type = ComponentType::Text;
-    text_component->position = {0, 0};
-    current.add(text_component);
+        Component *text_component = Component::text_component();
+        text_component->texture = text_texture;
+        text_component->component_type = ComponentType::Text;
+        text_component->position = {200, 0};
+        current->add(text_component);
+
+        show.append(current);
+    }
+    {
+        Slide *current = new Slide;;
+
+        Component *image_component = Component::image_component();
+        image_component->texture = texture;
+        image_component->component_type = ComponentType::Image;
+        image_component->position = {800, 0};
+        current->add(image_component);
+
+
+        auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+
+        Component *text_component = Component::text_component();
+        text_component->texture = text_texture;
+        text_component->component_type = ComponentType::Text;
+        text_component->position = {0, 0};
+        current->add(text_component);
+
+        show.append(current);
+    }
 
     bool quit = false;
     while (!quit) {
@@ -117,14 +144,20 @@ int main() {
                     case SDLK_q:
                         quit = true;
                         break;
+                    case SDLK_SPACE:
+                    case SDLK_n:
+                        show.next_slide();
+                        break;
+                    case SDLK_BACKSPACE:
+                    case SDLK_p:
+                        show.previous_slide();
+                        break;
                 }
             }
         }
 
         SDL_RenderClear(ren);
-        current.draw(ren);
-        /* render_texture(texture, ren, 800, 0); */
-        /* render_texture(text_texture, ren, 0, 0); */
+        show.draw(ren);
         SDL_RenderPresent(ren);
     }
 
