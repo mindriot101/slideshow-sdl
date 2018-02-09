@@ -6,6 +6,7 @@
 #include "component.h"
 #include "image_manager.h"
 #include "slideshow.h"
+#include "font_manager.h"
 
 using namespace std;
 
@@ -33,14 +34,8 @@ void render_texture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y) {
     render_texture(tex, ren, x, y, w, h);
 }
 
-SDL_Texture *create_text(const string &message, const string &font_file,
+SDL_Texture *create_text(const string &message, TTF_Font *font,
                 SDL_Color color, int fontSize, SDL_Renderer *ren) {
-    auto font = TTF_OpenFont(font_file.c_str(), fontSize);
-    if (font == nullptr) {
-        cerr << "Error loading font: " << font_file << ": " << SDL_GetError() << endl;
-        return nullptr;
-    }
-
     auto surf = TTF_RenderText_Blended(font, message.c_str(), color);
     if (surf == nullptr) {
         cerr << "Error rendering text" << endl;
@@ -54,7 +49,6 @@ SDL_Texture *create_text(const string &message, const string &font_file,
     }
 
     SDL_FreeSurface(surf);
-    TTF_CloseFont(font);
     return texture;
 }
 
@@ -87,6 +81,9 @@ int main() {
     ImageManager image_manager(ren);
     image_manager.add("cat", "../run_tree/images/cat.png");
 
+    FontManager font_manager;
+    font_manager.add("droid", "../run_tree/fonts/DroidSansMono.ttf", 84);
+
     Slideshow show;
 
     {
@@ -103,13 +100,13 @@ int main() {
         current->add(image_component);
 
 
-        // auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
+        auto text_texture = create_text("Hello world", font_manager.get("droid"), {255, 255, 255, 255}, 64, ren);
 
-        /* auto text_component = Component::text_component(); */
-        /* text_component->texture = text_texture; */
-        /* text_component->component_type = ComponentType::Text; */
-        /* text_component->position = {200, 0}; */
-        /* current->add(text_component); */
+        auto text_component = Component::text_component();
+        text_component->texture = text_texture;
+        text_component->component_type = ComponentType::Text;
+        text_component->position = {200, 0};
+        current->add(text_component);
 
         show.append(current);
     }
