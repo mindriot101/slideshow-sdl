@@ -2,7 +2,7 @@
 #include "slide.h"
 #include <SDL2/SDL.h>
 
-void Slideshow::append(Slide *slide) {
+void Slideshow::append(std::shared_ptr<Slide> &slide) {
     slides.push_back(slide);
 }
 
@@ -25,12 +25,4 @@ void Slideshow::previous_slide() {
     }
 
     printf("Current slide: %u\n", current_slide);
-}
-
-Slideshow::~Slideshow() {
-    for (auto slide: slides) {
-        if (slide != nullptr) {
-            delete slide;
-        }
-    }
 }

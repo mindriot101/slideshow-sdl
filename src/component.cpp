@@ -12,14 +12,14 @@ void Component::draw(SDL_Renderer *ren) {
     SDL_RenderCopy(ren, texture, NULL, &dst);
 }
 
-Component *Component::text_component() {
-    Component *component = new Component;
+std::shared_ptr<Component> Component::text_component() {
+    auto component = std::make_shared<Component>();
     component->component_type = ComponentType::Text;
     return component;
 }
 
-Component *Component::image_component() {
-    Component *component = new Component;
+std::shared_ptr<Component> Component::image_component() {
+    auto component = std::make_shared<Component>();
     component->component_type = ComponentType::Image;
     return component;
 }

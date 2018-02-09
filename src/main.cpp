@@ -92,9 +92,9 @@ int main() {
     Slideshow show;
 
     {
-        Slide *current = new Slide;;
+        auto current = make_shared<Slide>();
 
-        Component *image_component = Component::image_component();
+        auto image_component = Component::image_component();
         image_component->texture = texture;
         image_component->component_type = ComponentType::Image;
         image_component->position = {800, 300};
@@ -103,7 +103,7 @@ int main() {
 
         auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
 
-        Component *text_component = Component::text_component();
+        auto text_component = Component::text_component();
         text_component->texture = text_texture;
         text_component->component_type = ComponentType::Text;
         text_component->position = {200, 0};
@@ -112,9 +112,9 @@ int main() {
         show.append(current);
     }
     {
-        Slide *current = new Slide;;
+        auto current = make_shared<Slide>();
 
-        Component *image_component = Component::image_component();
+        auto image_component = Component::image_component();
         image_component->texture = texture;
         image_component->component_type = ComponentType::Image;
         image_component->position = {800, 0};
@@ -123,7 +123,7 @@ int main() {
 
         auto text_texture = create_text("Hello world", "../run_tree/fonts/DroidSansMono.ttf", {255, 255, 255, 255}, 64, ren);
 
-        Component *text_component = Component::text_component();
+        auto text_component = Component::text_component();
         text_component->texture = text_texture;
         text_component->component_type = ComponentType::Text;
         text_component->position = {0, 0};
