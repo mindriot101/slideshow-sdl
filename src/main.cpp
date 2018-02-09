@@ -65,13 +65,37 @@ int App::init() {
         image_component->position = {1280 / 2, 720 / 2};
         current->add(image_component);
 
-
         auto text_texture = font_manager->create_text("Hello world", "droid", {255, 255, 0, 255});
 
         auto text_component = Component::text_component();
         text_component->texture = text_texture;
         text_component->component_type = ComponentType::Text;
         text_component->position = {1280 / 2, 720 / 2};
+        current->add(text_component);
+
+        show->append(current);
+    }
+
+    {
+        auto current = make_shared<Slide>();
+
+        auto image_component = Component::image_component();
+        image_component->texture = image_manager->get("cat");
+        if (image_component->texture == nullptr) {
+            fprintf(stderr, "TEXTURE IS NULL!!!\n");
+            return 1;
+        }
+        image_component->component_type = ComponentType::Image;
+        image_component->position = {400, 400};
+        current->add(image_component);
+
+        auto text_texture = font_manager->create_text("Hello world", "droid", {255, 255, 0, 255});
+
+        auto text_component = Component::text_component();
+        text_component->texture = text_texture;
+        text_component->component_type = ComponentType::Text;
+        text_component->position = {300, 300};
+        text_component->scale = Option<float>::Some(0.2);
         current->add(text_component);
 
         show->append(current);

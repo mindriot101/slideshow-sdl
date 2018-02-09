@@ -18,7 +18,7 @@ TTF_Font *FontManager::get(const std::string &tag) const {
 SDL_Texture *FontManager::create_text(const std::string &text, const std::string font_tag, SDL_Color color) const {
     auto font = get(font_tag);
 
-    auto surf = TTF_RenderText_Blended(font, text.c_str(), color);
+    auto surf = TTF_RenderUTF8_Blended(font, text.c_str(), color);
     if (surf == nullptr) {
         fprintf(stderr, "Error creating surface for text: %s\n", text.c_str());
         return nullptr;
