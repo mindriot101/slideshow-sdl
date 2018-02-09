@@ -15,14 +15,10 @@ void Slideshow::next_slide() {
     if ((current_slide + 1) < slides.size()) {
         current_slide += 1;
     }
-
-    printf("Current slide: %u\n", current_slide);
 }
 
 void Slideshow::previous_slide() {
     if (current_slide > 0) {
         current_slide -= 1;
     }
-
-    printf("Current slide: %u\n", current_slide);
 }
