@@ -8,7 +8,11 @@ void Slide::add(std::shared_ptr<Component> &component) {
 
 void Slide::draw(SDL_Renderer *ren) {
     for (auto component: components) {
-        if (component->scale) {
+        if (component->fit) {
+            component->fill(ren);
+        /* } else if (component->fit_width) { */
+        /*     component->fill_width(ren); */
+        } else if (component->scale) {
             component->draw(ren, component->scale.val());
         } else {
             component->draw(ren);

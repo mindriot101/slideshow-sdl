@@ -17,6 +17,7 @@ struct App {
     unique_ptr<FontManager> font_manager;
     unique_ptr<Slideshow> show;
 
+    ~App();
     int init();
     int run();
 };
@@ -55,15 +56,13 @@ int App::init() {
     {
         auto current = make_shared<Slide>();
 
-        auto image_component = Component::image_component();
-        image_component->texture = image_manager->get("cat");
-        if (image_component->texture == nullptr) {
-            fprintf(stderr, "TEXTURE IS NULL!!!\n");
-            return 1;
-        }
-        image_component->component_type = ComponentType::Image;
-        image_component->position = {1280 / 2, 720 / 2};
-        current->add(image_component);
+        SDL_Colour colour;
+        colour.r = 0;
+        colour.g = 255;
+        colour.b = 0;
+        colour.a = 255;
+        auto rect = Component::rect_component({0, 0, 300, 200}, colour);
+        current->add(rect);
 
         auto text_texture = font_manager->create_text("Hello world", "droid", {255, 255, 0, 255});
 
@@ -132,12 +131,18 @@ int App::run() {
             }
         }
 
+        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
         SDL_RenderClear(ren);
         show->draw(ren);
         SDL_RenderPresent(ren);
     }
 
     return 0;
+}
+
+App::~App() {
+    SDL_DestroyWindow(win);
+    SDL_Quit();
 }
 
 int main() {

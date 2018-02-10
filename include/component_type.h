@@ -4,6 +4,7 @@
 enum class ComponentType {
     Image,
     Text,
+    Rect,
 };
 
 #endif // COMPONENT_TYPE_H_
